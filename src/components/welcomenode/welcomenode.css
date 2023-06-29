@@ -1,0 +1,27 @@
+.welcomeNode{
+    border-radius: 10px;
+    height: 60px;
+    width: 291px;
+    background:white;
+    padding: 5px;
+}
+.welcomediv1{
+    display: flex;
+    justify-content: center;
+}
+.i-btn{
+    font-size: large;
+    padding: 0;
+    color: grey;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+.i-btn:hover{
+ font-size: larger;   
+}
+.divBtn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

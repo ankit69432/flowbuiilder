@@ -1,0 +1,89 @@
+
+.node{
+    padding: 10px;
+    min-height: 150px;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    background: rgb(255, 250, 250);
+    border-radius: 10px;
+  
+}
+input{
+    border: none;
+    border-radius: 3px;
+}
+.inner{
+    height: 100%;
+    background: rgb(255, 255, 255); 
+}
+.nodeHeader{
+    display: flex;
+    font: 100;
+    font-size: 20px;
+  
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.qDiv{
+    margin-top: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
+    display: flex;
+   
+    border-radius: 5px;
+    padding: 5px;
+    font-style:inherit;
+    font-size: 18px;
+    height: 30px;
+    align-items: center;
+    background: rgb(244, 244, 242);
+}
+.options{
+    display: grid;
+    grid-template-columns: auto auto;
+    padding: 10px;
+    
+    margin-top: 10%;
+}
+.options button{
+    background: none;
+    border-color: red;
+    border-radius: 3px;
+    margin: 5px;
+    height: 30px;
+
+}
+.options button:hover{
+    border-color: blue;
+    cursor: pointer;
+}
+.responseType{
+    display: flex;
+    
+}
+.addNew{
+
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.typeDiv{
+    
+    width: 30%;
+}
+.addNew button{
+    display: flex;
+    align-items: center;
+   
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.addNew button:hover{
+    font-size: large;
+}
+.optDiv{
+    width: 30%;
+}

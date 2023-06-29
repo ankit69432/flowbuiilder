@@ -1,0 +1,151 @@
+:root{
+    --colorOne: gray ;
+}
+.BuilderDiv{
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+.FlowScreen{
+    max-width: 75%;
+    height: 100%;
+}
+.LeftBar{
+    height: 100%;
+    width: 35%;
+    background:rgb(0, 0, 0);
+}
+
+.wlcmScreen{
+    width: 100vw;
+    height: 100vh;
+    background:var(--colorOne);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.innerWlcm{
+    border-radius: 20px;
+    height: 50%;
+    width: 30%;
+    background:white;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    
+}
+.div1{
+    padding: 10px;
+}
+.div1 input{
+    border: none;
+    height: 20px;
+    font-size: 20px;
+    padding: 5px;
+    margin-top: 10px;
+}
+.div1 button{
+    margin-top: 10px;
+    background: rgb(59, 231, 231);
+    border: none;
+    border-radius: 5px;
+    height: 30px;
+}
+
+.questions label{
+    color: white;
+    font-size: large;
+    font-style:inherit;
+    margin-bottom: 5px;
+}
+.questions{
+    margin: 5px;
+    min-height: 15%;
+    max-height: 30%;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    background:var(--colorOne);
+}
+
+.response{
+    display: flex;
+    flex-direction: column;
+    margin:5px;
+    background:var(--colorOne);
+    /* flex-direction: column; */
+}
+.default{
+    display: grid;
+    grid-template-columns: auto auto;
+}
+.default button{
+    margin: 5px;
+    padding: 3px;
+    cursor: pointer;
+}
+.default button:hover{
+    background:green;
+}
+.customResponse{
+    display:flex ;
+    padding: 5px;
+    
+}
+.customResponse input{
+    padding: 5px;
+    font-size: 15px;
+    width: 70%;
+    margin-right: 10px;
+}
+.customResponse button{
+    width: 20%;
+    background-color: aqua;
+    border: none;
+    font-family:bolder;
+    font-size: large;
+    border-radius: 5px ;
+}
+.customResponse button:hover{
+    cursor: pointer;
+
+}
+
+.nodeLabel{
+    display: flex;
+    flex-direction: column;
+    height: 5%;
+    justify-content: center;
+    margin: 5px;
+    padding:5px;
+    background:var(--colorOne);
+}
+.nodeLabel input{
+    /* height: 30px; */
+    padding: 5px;
+    font-size: 20px;
+}
+
+.questions input{
+    padding: 5px;
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+.top{
+    height: 15%;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+.inputType{
+    margin: 5px;
+    padding: 5px;
+    background:var(--colorOne);
+}
+.inputType input:hover{
+    cursor: pointer;
+}
+h2{
+    color: white;
+    margin: 5px;
+}
