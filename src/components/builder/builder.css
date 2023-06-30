@@ -23,8 +23,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    /* filter: drop-shadow(5px); */
+    position: absolute;
+    
+    
 }
 .innerWlcm{
+    backdrop-filter: blur(5px);
+    
     border-radius: 20px;
     height: 50%;
     width: 30%;
@@ -38,6 +44,7 @@
     padding: 10px;
 }
 .div1 input{
+    width: 80%;
     border: none;
     height: 20px;
     font-size: 20px;

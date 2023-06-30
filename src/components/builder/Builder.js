@@ -222,7 +222,16 @@ function Builder() {
         <div className="div1">
           <label>Enter the welcome message</label>
           <br />
-          <input placeholder="Write your  message " id="lbl"></input>
+          <input
+            placeholder="Write your  message "
+            id="lbl"
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                setFlag(false);
+                rootNode(document.getElementById("lbl").value);
+              }
+            }}
+          ></input>
           <br />
           <button
             onClick={() => {
@@ -311,6 +320,13 @@ function Builder() {
               id="textInput"
               onChange={(e) => {
                 setText(e.target.value);
+              }}
+              onKeyUp={(e) => {
+                if (e.key === "Enter") {
+                  options.push(text);
+                  setChoice(text);
+                  document.getElementById("textInput").value = "";
+                }
               }}
               placeholder="Your own response.."
             />
