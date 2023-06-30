@@ -2,7 +2,7 @@
 .node{
     padding: 10px;
     min-height: 150px;
-    min-width: 200px;
+    min-width: 300px;
     display: flex;
     flex-direction: column;
     background: rgb(255, 250, 250);

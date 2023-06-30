@@ -5,10 +5,12 @@ import ReactFlow, {
   applyEdgeChanges,
   addEdge,
   Background,
+  MiniMap,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import CustomeNode from "../customnode/CustomeNode";
 import WelcomeNode from "../welcomenode/WelcomeNode";
+import PointedEdge from "../customEdge/PointEdge";
 const options = [
   "Talk to sales",
   "Staff augmentation",
@@ -27,7 +29,24 @@ function Builder() {
   const [counter, dispatch] = useReducer(reducer, { count: 1 });
   const [flag, setFlag] = useState(true);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges] = useState([]);
+  const [edges, setEdges] = useState([
+    {
+      id: "0",
+      source: "0",
+      target: "1",
+
+      type: "pointEdge",
+      style: { stroke: "black", strokeWidth: 2 },
+    },
+    {
+      id: "1",
+      source: "1",
+      target: "2",
+
+      type: "pointEdge",
+      style: { stroke: "black", strokeWidth: 2 },
+    },
+  ]);
   const [label, setLabel] = useState();
   const [text, setText] = useState("");
   const [inputType, setInputType] = useState("");
@@ -110,6 +129,7 @@ function Builder() {
     []
   );
   const rootNode = (lbl) => {
+    localStorage.setItem("id", 0);
     setNodes([
       {
         id: "0",
@@ -126,26 +146,37 @@ function Builder() {
   };
   const createNode = () => {
     setIsVisible(count);
-    setEdges((edges) => [
-      ...edges,
-      {
-        id: "" + count,
-        source: count + "",
-        target: Number(count) + 1 + "",
-      },
-    ]);
+    if (count > 0) {
+      setEdges((edges) => [
+        ...edges,
+        {
+          id: "" + count,
+          source: count + "",
+          target: Number(count) + 1 + "",
+          type: "pointEdge",
+          style: { stroke: "black", strokeWidth: 2 },
+        },
+      ]);
+    }
+    console.log(nodes);
     dispatch();
-
+    console.log({
+      id: "" + count,
+      source: count + "",
+      target: Number(count) + 1 + "",
+    });
     console.log("---", counter.count);
-    localStorage.setItem("id", ++count);
-
-    console.log(localStorage.getItem("id"), nodes.length);
+    let size = localStorage.getItem("id") === "0" ? 150 : 300;
+    console.log(size);
     setNodes((nodes) => [
       ...nodes,
       {
         id: Number(nodes[nodes.length - 1].id) + 1 + "",
         type: "custom",
-        position: { x: 450, y: nodes[nodes.length - 1].position.y + 150 },
+        position: {
+          x: nodes[nodes.length - 1].position.x,
+          y: nodes[nodes.length - 1].position.y + size,
+        },
         data: {
           label: label,
           createNode: createNode,
@@ -156,6 +187,8 @@ function Builder() {
         },
       },
     ]);
+    localStorage.setItem("id", ++count);
+
     document.getElementById("question").value = "";
     document.getElementById("label").value = "";
     console.log(edges);
@@ -212,12 +245,19 @@ function Builder() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
+          edgeTypes={{ pointEdge: PointedEdge }}
         >
           <Background
             variant="dots"
             gap={12}
             size={1}
             style={{ background: "rgb(206, 205, 205)" }}
+          />
+          <MiniMap
+            nodeColor={"#dd33ff"}
+            nodeStrokeWidth={3}
+            zoomable
+            pannable
           />
         </ReactFlow>
       </div>
