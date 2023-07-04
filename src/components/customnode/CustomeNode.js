@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Handle, Position } from "reactflow";
 import "./customeNode.css";
+import { setId } from "../redux/idSlice";
 
 const CustomeNode = ({ data, id }) => {
+  const dispatch = useDispatch();
   const clickHander = (e) => {
     // onNodeClik(id);
+    dispatch(setId(id));
     localStorage.setItem("id", id);
     console.log(id);
   };
@@ -44,7 +48,7 @@ const CustomeNode = ({ data, id }) => {
             {data.isVisible ? (
               <button
                 onClick={() => {
-                  data.createNode();
+                  data.createNode(id);
                 }}
               >
                 <i className="fa fa-plus-circle" aria-hidden="true"></i>

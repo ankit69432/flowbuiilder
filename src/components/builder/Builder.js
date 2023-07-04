@@ -1,5 +1,11 @@
 import "./builder.css";
-import { useCallback, useMemo, useState, useEffect, useReducer } from "react";
+import {
+  useCallback,
+  useMemo,
+  useState,
+  useEffect,
+  useDeferredValue,
+} from "react";
 import ReactFlow, {
   useNodesState,
   applyEdgeChanges,
@@ -7,10 +13,15 @@ import ReactFlow, {
   Background,
   MiniMap,
 } from "reactflow";
+import { useSelector } from "react-redux/es/hooks/useSelector";
 import "reactflow/dist/style.css";
 import CustomeNode from "../customnode/CustomeNode";
 import WelcomeNode from "../welcomenode/WelcomeNode";
 import PointedEdge from "../customEdge/PointEdge";
+import { useChangeLabel } from "./customHooks/useChangeLabel";
+import { useChangeInputType } from "./customHooks/useChangeInputType";
+import useUpdateQuestion from "./customHooks/useUpdateQuestion";
+import useChoices from "./customHooks/useChoices";
 const options = [
   "Talk to sales",
   "Staff augmentation",
@@ -19,14 +30,10 @@ const options = [
   "About Us",
   "Contact to hr",
 ];
-function reducer(state, action) {
-  console.log(state.count);
-  return { count: state.count + 1 };
-}
+
 // const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
 let count = 0;
 function Builder() {
-  const [counter, dispatch] = useReducer(reducer, { count: 1 });
   const [flag, setFlag] = useState(true);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges] = useState([
@@ -38,14 +45,14 @@ function Builder() {
       type: "pointEdge",
       style: { stroke: "black", strokeWidth: 2 },
     },
-    {
-      id: "1",
-      source: "1",
-      target: "2",
+    // {
+    //   id: "1",
+    //   source: "1",
+    //   target: "2",
 
-      type: "pointEdge",
-      style: { stroke: "black", strokeWidth: 2 },
-    },
+    //   type: "pointEdge",
+    //   style: { stroke: "black", strokeWidth: 2 },
+    // },
   ]);
   const [label, setLabel] = useState();
   const [text, setText] = useState("");
@@ -54,41 +61,22 @@ function Builder() {
   const [choice, setChoice] = useState([]);
   const [isVisible, setIsVisible] = useState(0);
 
-  useEffect(() => {
-    setNodes((nds) =>
-      nds.map((node) => {
-        if (node.id === localStorage.getItem("id")) {
-          node.data = {
-            ...node.data,
-            inputType: inputType,
-          };
-        }
+  const labelValue = useDeferredValue(label);
+  const inputValue = useDeferredValue(inputType);
+  const questionValue = useDeferredValue(question);
+  const [edge, setEdge] = useState();
+  const [isInitial, setIsInitial] = useState(false);
+  const id = useSelector((state) => state.id);
 
-        return node;
-      })
-    );
-  }, [inputType, setNodes]);
+  useChangeInputType(inputValue, setNodes);
+  useUpdateQuestion(questionValue, setNodes);
   useEffect(() => {
     setNodes((nds) =>
       nds.map((node) => {
         if (node.id === localStorage.getItem("id")) {
           node.data = {
             ...node.data,
-            question: question,
-          };
-        }
-
-        return node;
-      })
-    );
-  }, [question, setNodes]);
-  useEffect(() => {
-    setNodes((nds) =>
-      nds.map((node) => {
-        if (node.id === localStorage.getItem("id")) {
-          node.data = {
-            ...node.data,
-            isVisible: false,
+            isVisible: true,
           };
         }
 
@@ -96,38 +84,14 @@ function Builder() {
       })
     );
   }, [isVisible, setNodes]);
-  useEffect(() => {
-    setNodes((nds) =>
-      nds.map((node) => {
-        if (node.id === localStorage.getItem("id")) {
-          node.data = {
-            ...node.data,
-            label: label,
-          };
-        }
-
-        return node;
-      })
-    );
-  }, [label, setNodes]);
-  useEffect(() => {
-    setNodes((nds) =>
-      nds.map((node) => {
-        if (node.id === localStorage.getItem("id")) {
-          node.data = {
-            ...node.data,
-            options: [...node.data.options, choice],
-          };
-        }
-
-        return node;
-      })
-    );
-  }, [choice, setNodes]);
+  useChangeLabel(labelValue, setNodes);
+  useChoices(choice, setNodes);
   const nodeTypes = useMemo(
     () => ({ custom: CustomeNode, welcome: WelcomeNode }),
     []
   );
+  useEffect(() => {}, [id]);
+  const edgeTypes = useMemo(() => ({ pointEdge: PointedEdge }), []);
   const rootNode = (lbl) => {
     localStorage.setItem("id", 0);
     setNodes([
@@ -144,30 +108,28 @@ function Builder() {
       },
     ]);
   };
-  const createNode = () => {
+  const createNode = (nodeId) => {
     setIsVisible(count);
+    console.log(nodeId);
+
     if (count > 0) {
-      setEdges((edges) => [
-        ...edges,
-        {
-          id: "" + count,
-          source: count + "",
-          target: Number(count) + 1 + "",
-          type: "pointEdge",
-          style: { stroke: "black", strokeWidth: 2 },
-        },
-      ]);
+      setEdge({
+        id: "" + count,
+        source: nodeId,
+        target: Number(count) + 1 + "",
+        type: "pointEdge",
+        style: { stroke: "black", strokeWidth: 2 },
+      });
     }
-    console.log(nodes);
-    dispatch();
-    console.log({
+
+    console.table({
       id: "" + count,
-      source: count + "",
+      source: nodeId + "",
       target: Number(count) + 1 + "",
     });
-    console.log("---", counter.count);
+
     let size = localStorage.getItem("id") === "0" ? 150 : 300;
-    console.log(size);
+    console.table(edges);
     setNodes((nodes) => [
       ...nodes,
       {
@@ -216,6 +178,18 @@ function Builder() {
       document.getElementById("text").checked = false;
     }
   };
+  // console.log(edges);
+
+  useEffect(() => {
+    if (!isInitial) {
+      if (count > 0) {
+        setEdges((edges) => [...edges, edge]);
+      }
+      console.table(edges);
+    } else {
+      setIsInitial(false);
+    }
+  }, [edge]);
   return flag ? (
     <div className="wlcmScreen">
       <div className="innerWlcm">
@@ -254,7 +228,7 @@ function Builder() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
-          edgeTypes={{ pointEdge: PointedEdge }}
+          edgeTypes={edgeTypes}
         >
           <Background
             variant="dots"
@@ -272,9 +246,7 @@ function Builder() {
       </div>
       <div className="LeftBar">
         <div className="top">
-          <h3 style={{ color: "white" }}>
-            Selected {localStorage.getItem("id")}
-          </h3>
+          <h3 style={{ color: "white" }}>Selected {id}</h3>
         </div>
         <div className="nodeLabel">
           <input
