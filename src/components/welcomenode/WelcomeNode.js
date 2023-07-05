@@ -1,9 +1,13 @@
 import "./welcomenode.css";
 import { Handle, Position } from "reactflow";
+import { useDispatch } from "react-redux";
+import { setId } from "../redux/idSlice";
 
 function WelcomeNode({ lable, id, data }) {
+  const dispatch = useDispatch();
   function getId() {
     //localStorage.setItem("id", Number(id));
+    dispatch(setId(id));
   }
   return (
     <div onClick={() => getId()} className="welcomeNode">
@@ -14,7 +18,7 @@ function WelcomeNode({ lable, id, data }) {
         <button
           className="i-btn"
           onClick={() => {
-            data.createNode();
+            data.createNode(id);
           }}
         >
           <i className="fa fa-plus-circle" aria-hidden="true"></i>
